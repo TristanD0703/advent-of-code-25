@@ -8,7 +8,7 @@ Each day's programs are my solutions to the 2nd challenge for the day.
 
 ## Usage
 
-1. Ensure you have Go installed on your system. [Learn more] (https://go.dev/doc/install)
+1. Ensure you have Go installed on your system. [Learn more](https://go.dev/doc/install)
 
 2. Navigate to the corresponding day's question page and find the question's input text.
 
