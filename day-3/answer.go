@@ -30,35 +30,30 @@ func main() {
 
 func MaxJoltage(bank string, targetLength int) int {
 	currMaxString := string(bank[0])
-	// currMaxLeft, currMaxRight, leftIndex := charToInt(bank[0]), charToInt(bank[1]), 0
 
 	for i, char := range bank[1:] {
 		i++
 		curr := charToInt(byte(char))
 
+		// Given how many characters we have in our max & how many characters are left in the bank,
+		// Check how many digits we can replace within our max so we can still make a total of 12 digits
 		charsLeftInBank := len(bank) - i
 		charsLeftToFillIn := targetLength - len(currMaxString)
 		digitsWeCanReplace := min(charsLeftInBank, targetLength) - charsLeftToFillIn
-		replaced := false
 
-		if digitsWeCanReplace > 0 {
-			startIdx := len(currMaxString) - digitsWeCanReplace
-			replaceIdx := FindIndexSmallerThanDigit(curr, currMaxString, startIdx)
+		// Get the most significant digit we can replace
+		startIdx := len(currMaxString) - digitsWeCanReplace
+		replaceIdx := FindIndexSmallerThanDigit(curr, currMaxString, startIdx)
 
-			if replaceIdx > -1 {
-				newMax := currMaxString[:replaceIdx]
-				newMax += string(char)
-				currMaxString = newMax
-				replaced = true
-			}
-
-		}
-
-		if len(currMaxString) < targetLength && !replaced {
+		// If we can replace a digit, replace and remove the preceding digits
+		if replaceIdx > -1 {
+			newMax := currMaxString[:replaceIdx]
+			newMax += string(char)
+			currMaxString = newMax
+		} else if len(currMaxString) < targetLength {
+			// Add string if we didn't replace it and we have more space in our number
 			currMaxString += string(char)
 		}
-
-		fmt.Printf("str=%s, len=%d\n", currMaxString, len(currMaxString))
 	}
 
 	res, err := strconv.Atoi(currMaxString)
@@ -72,9 +67,11 @@ func charToInt(char byte) int {
 	return int(char % 48)
 }
 
-func FindIndexSmallerThanDigit(char int, bank string, start int) int {
-	for i := start; i < len(bank); i++ {
-		if charToInt(bank[i]) < char {
+// Given a digit, get the first index in the given string where the digit is < the input
+// Starts searching at and including start. Returns -1 if all digits are >= the input
+func FindIndexSmallerThanDigit(digit int, str string, start int) int {
+	for i := start; i < len(str); i++ {
+		if charToInt(str[i]) < digit {
 			return i
 		}
 	}
