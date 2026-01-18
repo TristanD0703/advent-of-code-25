@@ -21,13 +21,12 @@ func main() {
 
 	for idRange := range ranges {
 		ret := strings.Split(idRange, "-")
+
 		start, err := strconv.Atoi(ret[0])
 		if err != nil {
 			log.Fatal(err)
 		}
-
 		end, err := strconv.Atoi(ret[1])
-
 		if err != nil {
 			log.Fatal(err)
 		}
@@ -42,33 +41,20 @@ func main() {
 		}
 	}
 
-	CheckProductID("2121212118")
 	fmt.Printf("Invalid IDs: %d\n", invalidCount)
 }
 
 // Checks if a product id is invalid according to rules. Returns false for invalid.
 func CheckProductID(id string) bool {
-	// quasai hash table int -> bool
-	// var seen [10]bool
-	// asciiBeginInts := 48
 
-	// curr := 0
-	// for curr < len(id) {
-	// 	// Get integer from ascii
-	// 	integer := id[curr] % byte(asciiBeginInts)
-	// 	if seen[integer] {
-	// 		break
-	// 	}
-
-	// 	seen[integer] = true
-	// 	curr++
-	// }
-
+	// Sliding window approach - Increase the repeated sequence substring length until it repeats over the whole string
 	for seqLength := 1; seqLength <= len(id)/2; seqLength++ {
 		currSeq := id[:seqLength]
 		curr := seqLength
 		repeat := true
 		count := 1
+
+		// Compare beginning sequence to all other non-overlapping sequences
 		for repeat && curr+seqLength <= len(id) {
 			subseqToComp := id[curr : curr+seqLength]
 
@@ -80,10 +66,12 @@ func CheckProductID(id string) bool {
 			curr += seqLength
 		}
 
+		// Check if substring repeats over the whole string
 		if float32(count) == float32(len(id))/float32(seqLength) {
 			return false
 		}
 	}
 
+	// If we make it here, there are no repeating subsequences
 	return true
 }
