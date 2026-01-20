@@ -28,6 +28,10 @@ func main() {
 	fmt.Printf("Max combined joltage: %d\n", totalJoltage)
 }
 
+// Given a string, find non-contigious substring that is of length targetLength
+// and contains the maximum integer value possible
+//
+// Ex: "818181911112111" -> 888911112111
 func MaxJoltage(bank string, targetLength int) int {
 	currMaxString := string(bank[0])
 
